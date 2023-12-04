@@ -1,0 +1,53 @@
+<div class="w-[1200px] max-w-full m-auto mt-8">
+  <div
+    class="w-full h-[440px] lg:rounded-2xl bg-poster bg-center flex items-center fill-current bg-cover shadow-sm relative"
+  >
+    <ngx-skeleton-loader
+      class="w-full absolute top-0 left-0 -z-10"
+      [theme]="{ height: '440px', width: '100%' }"
+    ></ngx-skeleton-loader>
+    <div class="w-full flex justify-center items-center flex-col">
+      <h1
+        class="text-center font-bold text-5xl leading-[1.4] md:text-8xl text-orange-800 md:font-bold"
+      >
+        Experience
+      </h1>
+      <h1
+        class="text-center font-bold text-5xl leading-[1.4] md:text-8xl text-gray-800 md:font-bold mb-6"
+      >
+        Bhagavad Gita
+      </h1>
+
+      <button
+        class="w-36 h-12 m-auto bg-orange-500 text-white rounded-md"
+        routerLink="/chapters"
+      >
+        Read Now
+      </button>
+    </div>
+  </div>
+  <div class="my-4 p-2 md:p-0">
+    <div class="border rounded-2xl p-8 md:p-12 bg-white">
+      <h2
+        class="flex justify-start items-center gap-4 text-orange-500 font-semibold md:text-xl text-[16px]"
+      >
+        About Bhagavad Gita
+        <div class="flex-1 h-[1px] bg-gray-300"></div>
+      </h2>
+      <p class="text-gray-500 leading-[1.8] my-4 text-xs md:text-[18px]">
+        The Bhagavad Gita, nestled within the ancient Indian epic Mahabharata,
+        is a profound dialogue between Lord Krishna and the warrior prince
+        Arjuna. Set on the battlefield of Kurukshetra, this conversation unfolds
+        as Arjuna grapples with moral quandaries and ethical dilemmas about
+        participating in a war against his own kin.
+        <br /><br />
+        In the Gita's 700 verses across 18 chapters, Krishna imparts wisdom
+        encompassing multifaceted themes that transcend time and space.<br /><br />
+        At its core lies the concept of duty or dharma. Krishna urges Arjuna to
+        fulfill his duty as a warrior, emphasizing the significance of righteous
+        action. He unfolds the intricate web of duty, stretching beyond
+        immediate responsibilities, woven into the cosmic fabric.
+      </p>
+    </div>
+  </div>
+</div>

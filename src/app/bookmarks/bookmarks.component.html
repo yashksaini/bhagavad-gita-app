@@ -1,0 +1,117 @@
+<div class="w-[1200px] max-w-full py-8 px-4 m-auto">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl md:text-4xl font-semibold text-gray-700">Progress</h1>
+    <div
+      class="w-32 md:w-48 h-10 md:h-12 flex rounded-full shadow-sm hover:cursor-pointer relative bg-white z-10 before:absolute before:top-0 before:left-0 before:bg-orange-500 md:before:w-24 before:w-16 before:h-full before:rounded-full before:-z-10 before:transition-all before:duration-500"
+      [ngClass]="
+        language === 'english'
+          ? 'before:translate-x-0'
+          : 'before:translate-x-16 md:before:translate-x-24'
+      "
+    >
+      <div
+        class="rounded-l-full w-24 text-xs md:text-[16px] flex justify-center items-center transition-colors duration-500"
+        [ngClass]="language === 'english' ? ' text-white' : ''"
+        (click)="setLanguage('english')"
+      >
+        English
+      </div>
+      <div
+        class="rounded-r-full w-24 text-xs md:text-[16px] flex justify-center items-center transition-colors duration-500"
+        [ngClass]="language === 'hindi' ? ' text-white' : ''"
+        (click)="setLanguage('hindi')"
+      >
+        हिंदी
+      </div>
+    </div>
+  </div>
+  <div class="flex justify-start gap-1 items-center mb-6">
+    <div
+      class="inline-flex w-5 h-5 border-orange-400 rounded-full justify-center items-center bg-orange-400 text-white hover:cursor-pointer"
+    ></div>
+    <div class="text-gray-500 text-[14px]">- Completed</div>
+  </div>
+  <div
+    *ngIf="isLoading"
+    class="w-full mt-4 bg-white border rounded-xl p-6 md:p-8"
+  >
+    <ngx-skeleton-loader
+      [theme]="{ height: '28px', width: '160px', margin: '0px' }"
+    ></ngx-skeleton-loader>
+    <ngx-skeleton-loader
+      appearance="circle"
+      [theme]="{ height: '40px', width: '40px', margin: '0px' }"
+      count="47"
+      class="grid mt-4 md:mt-6 items-center justify-center gap-2"
+      style="grid-template-columns: repeat(auto-fill, minmax(40px, 1fr))"
+    ></ngx-skeleton-loader>
+  </div>
+  <div
+    *ngIf="isLoading"
+    class="w-full mt-4 bg-white border rounded-xl p-6 md:p-8"
+  >
+    <ngx-skeleton-loader
+      [theme]="{ height: '28px', width: '160px', margin: '0px' }"
+    ></ngx-skeleton-loader>
+    <ngx-skeleton-loader
+      appearance="circle"
+      [theme]="{ height: '40px', width: '40px', margin: '0px' }"
+      count="72"
+      class="grid mt-4 md:mt-6 items-center justify-center gap-2"
+      style="grid-template-columns: repeat(auto-fill, minmax(40px, 1fr))"
+    ></ngx-skeleton-loader>
+  </div>
+  <div
+    *ngIf="isLoading"
+    class="w-full mt-4 bg-white border rounded-xl p-6 md:p-8"
+  >
+    <ngx-skeleton-loader
+      [theme]="{ height: '28px', width: '160px', margin: '0px' }"
+    ></ngx-skeleton-loader>
+    <ngx-skeleton-loader
+      appearance="circle"
+      [theme]="{ height: '40px', width: '40px', margin: '0px' }"
+      count="43"
+      class="grid mt-4 md:mt-6 items-center justify-center gap-2"
+      style="grid-template-columns: repeat(auto-fill, minmax(40px, 1fr))"
+    ></ngx-skeleton-loader>
+  </div>
+
+  <div *ngIf="!isLoading">
+    <div
+      class="w-full mt-4 bg-white border rounded-xl p-6 md:p-8"
+      *ngFor="let chapter of chapters"
+    >
+      <h1 class="text-xl text-orange-500 font-semibold">
+        {{ language === "english" ? "Chapter " : "अध्याय " }}
+        {{ chapter.chapter_number }}
+        <span
+          class="py-2 px-4 bg-white border ml-4 text-xs font-normal text-gray-700 rounded-full"
+          >{{ progress[chapter.chapter_number - 1].length }} of
+          {{ chapter.verses_count }}</span
+        >
+      </h1>
+      <div
+        class="grid mt-4 md:mt-6 items-center justify-center gap-2"
+        style="grid-template-columns: repeat(auto-fill, minmax(40px, 1fr))"
+      >
+        <div
+          *ngFor="let i of counter(chapter.verses_count)"
+          class="w-10 h-10 flex justify-center items-center"
+          routerLink="/chapter/{{ chapter.chapter_number }}/shlok/{{ i }}"
+        >
+          <span
+            class="flex w-10 h-10 border rounded-full justify-center bg-gray-50 items-center hover:cursor-pointer hover:border-gray-400"
+            *ngIf="progress[chapter.chapter_number - 1]?.indexOf(i) === -1"
+            >{{ i }}</span
+          >
+          <span
+            class="flex w-10 h-10 border-orange-400 rounded-full justify-center items-center bg-orange-400 text-white hover:cursor-pointer"
+            *ngIf="progress[chapter.chapter_number - 1]?.indexOf(i) !== -1"
+            >{{ i }}</span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

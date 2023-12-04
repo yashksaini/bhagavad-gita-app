@@ -1,0 +1,187 @@
+<div class="w-[992px] max-w-full py-8 px-4 m-auto">
+  <div class="flex justify-between items-center">
+    <h1 class="text-2xl md:text-4xl font-semibold text-orange-500">
+      {{ language === "english" ? "Chapter " : "अध्याय " }} - {{ this.chapter }}
+    </h1>
+    <div
+      class="w-32 md:w-48 h-10 md:h-12 flex rounded-full shadow-sm hover:cursor-pointer relative bg-white z-10 before:absolute before:top-0 before:left-0 before:bg-orange-500 md:before:w-24 before:w-16 before:h-full before:rounded-full before:-z-10 before:transition-all before:duration-500"
+      [ngClass]="
+        language === 'english'
+          ? 'before:translate-x-0'
+          : 'before:translate-x-16 md:before:translate-x-24'
+      "
+    >
+      <div
+        class="rounded-l-full w-24 text-xs md:text-[16px] flex justify-center items-center transition-colors duration-500"
+        [ngClass]="language === 'english' ? ' text-white' : ''"
+        (click)="setLanguage('english')"
+      >
+        English
+      </div>
+      <div
+        class="rounded-r-full w-24 text-xs md:text-[16px] flex justify-center items-center transition-colors duration-500"
+        [ngClass]="language === 'hindi' ? ' text-white' : ''"
+        (click)="setLanguage('hindi')"
+      >
+        हिंदी
+      </div>
+    </div>
+  </div>
+  <h2 class="text-center mt-6 text-xl md:text-2xl font-semibold text-gray-600">
+    {{ language === "english" ? "Verse" : "श्लोक" }} - {{ this.shlok }}
+  </h2>
+  <div class="flex justify-between items-center gap-3">
+    <button
+      (click)="goToPrev()"
+      class="border rounded-full min-w-[40px] h-10 flex justify-center items-center text-gray-400 hover:border-orange-400 hover:bg-orange-50 hover:text-orange-400"
+    >
+      <i class="fa-solid fa-chevron-left"></i>
+    </button>
+    <p
+      *ngIf="!isLoading"
+      class="mt-4 leading-[2] md:leading-[2] text-[14px] md:text-4xl text-orange-500 text-center font-medium"
+      [innerHTML]="getTextWithLineBreaks(data?.text)"
+    ></p>
+    <ngx-skeleton-loader
+      class="mt-4 w-full"
+      [theme]="{ height: '144px' }"
+      *ngIf="isLoading"
+    >
+    </ngx-skeleton-loader>
+
+    <button
+      (click)="goToNext()"
+      class="border rounded-full min-w-[40px] h-10 flex justify-center items-center text-gray-400 hover:border-orange-400 hover:bg-orange-50 hover:text-orange-400"
+    >
+      <i class="fa-solid fa-chevron-right"></i>
+    </button>
+  </div>
+  <div>
+    <button
+      class="border py-2 px-4 bg-white my-4 m-auto block text-gray-700 rounded-full text-sm h-10 hover:bg-orange-50 hover:text-orange-500 hover:border-orange-500"
+      (click)="markCompleted()"
+      *ngIf="progress[chapter - 1].indexOf(shlok) === -1"
+    >
+      <i class="fa-regular fa-circle-check mr-1"></i> Mark as Completed
+    </button>
+    <button
+      class="border-orange-400 h-10 py-2 px-4 bg-orange-400 text-white my-4 m-auto block rounded-full text-sm"
+      (click)="markCompleted()"
+      *ngIf="progress[chapter - 1].indexOf(shlok) !== -1"
+    >
+      <i class="fa-regular fa-circle-check mr-1"></i> Completed
+    </button>
+  </div>
+  <div class="w-full h-[1px] my-8 bg-gray-200"></div>
+  <div class="flex justify-between items-center my-6 px-4">
+    <h3 class="font-semibold text-xl md:text-3xl text-center text-gray-700">
+      Tanslation
+    </h3>
+    <div
+      class="bg-white p-2 pl-2 pr-2 md:pl-4 md:pr-4 h-10 flex justify-center items-center rounded-md w-auto border"
+    >
+      <select
+        class="bg-white hover:cursor-pointer focus:outline-none text-[12px] md:text-[16px]"
+        (change)="setAuthor($event, 'translation')"
+      >
+        <option
+          *ngFor="let author of authors.tAuthors"
+          [attr.value]="author.author_name"
+          [selected]="
+            author.author_name ===
+            (language === 'english'
+              ? translation.engTAuthor
+              : translation.hinTAuthor)
+              ? true
+              : null
+          "
+        >
+          {{ author.author_name }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <p
+    *ngIf="!isLoading"
+    class="text-gray-700 leading-8 md:leading-10 text-[16px] md:text-2xl mb-8 px-4"
+  >
+    {{
+      language === "english"
+        ? descFinder(data?.translations, translation.engTAuthor)
+        : descFinder(data?.translations, translation.hinTAuthor)
+    }}
+  </p>
+  <ngx-skeleton-loader
+    class="mt-8 w-full px-4"
+    [theme]="{ height: '36px' }"
+    *ngIf="isLoading"
+  >
+  </ngx-skeleton-loader>
+  <ngx-skeleton-loader
+    class="mt-4 w-[80%] px-4"
+    [theme]="{ height: '36px', width: '80%' }"
+    *ngIf="isLoading"
+  >
+  </ngx-skeleton-loader>
+
+  <div class="w-full h-[1px] my-8 bg-gray-200"></div>
+  <div class="flex justify-between items-center my-6 px-4">
+    <h3 class="font-semibold text-xl md:text-3xl text-center text-gray-700">
+      Explanation
+    </h3>
+    <div
+      class="bg-white p-2 pl-2 pr-2 md:pl-4 md:pr-4 h-10 flex justify-center items-center rounded-md w-auto border"
+    >
+      <select
+        class="bg-white hover:cursor-pointer focus:outline-none text-[12px] md:text-[16px]"
+        (change)="setAuthor($event, 'commentary')"
+      >
+        <option
+          *ngFor="let author of authors.cAuthors"
+          [attr.value]="author.author_name"
+          [selected]="
+            author.author_name ===
+            (language === 'english'
+              ? translation.engCAuthor
+              : translation.hinCAuthor)
+              ? true
+              : null
+          "
+        >
+          {{ author.author_name }}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <p
+    *ngIf="!isLoading"
+    class="text-gray-700 leading-8 md:leading-10 text-[16px] md:text-2xl mb-8 text-justify px-4"
+  >
+    {{
+      language === "english"
+        ? descFinder(data?.commentaries, translation.engCAuthor)
+        : descFinder(data?.commentaries, translation.hinCAuthor)
+    }}
+  </p>
+  <div class="w-full" *ngIf="isLoading">
+    <ngx-skeleton-loader class="mt-8 w-full" [theme]="{ height: '30px' }">
+    </ngx-skeleton-loader>
+    <ngx-skeleton-loader
+      class="mt-4 w-full"
+      [theme]="{ height: '30px', width: '80%' }"
+    >
+    </ngx-skeleton-loader>
+    <ngx-skeleton-loader
+      class="mt-4 w-full"
+      [theme]="{ height: '30px', width: '100%' }"
+    >
+    </ngx-skeleton-loader>
+    <ngx-skeleton-loader
+      class="mt-4 w-full"
+      [theme]="{ height: '30px', width: '60%' }"
+    >
+    </ngx-skeleton-loader>
+  </div>
+</div>
